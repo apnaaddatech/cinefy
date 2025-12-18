@@ -1,1 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEFY | Coming Soon</title>
+    <style>
+        /* --- CSS STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap');
 
+        :root {
+            --primary-color: #e50914; /* Cinematic Red */
+            --text-color: #ffffff;
+            --bg-overlay: rgba(0, 0, 0, 0.75);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+            background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        /* Dark Overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.9) 100%);
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Logo Styling */
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 5rem;
+            letter-spacing: 5px;
+            color: var(--primary-color);
+            text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            color: #ddd;
+        }
+
+        /* Main Heading */
+        h1.main-title {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        p.description {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Notify Bar */
+        .notify-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+        }
+
+        .notify-box input {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            width: 300px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .notify-box button {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .notify-box button:hover {
+            background-color: #ff0f1f;
+            transform: scale(1.05);
+        }
+
+        /* Footer / Powered By */
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1.5rem;
+        }
+
+        .powered-by {
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        .powered-by a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .powered-by a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-color);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .powered-by a:hover {
+            color: var(--primary-color);
+        }
+        
+        .powered-by a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo { font-size: 3.5rem; }
+            h1.main-title { font-size: 2.5rem; }
+            .notify-box { flex-direction: column; align-items: center; }
+            .notify-box input { width: 100%; }
+            .notify-box button { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        <!-- Brand Section -->
+        <div class="logo">CINEFY</div>
+        <p class="tagline">The Ultimate Movie Experience</p>
+
+        <!-- Main Content -->
+        <h1 class="main-title">SOMETHING EPIC <br> IS COMING SOON</h1>
+        
+        <p class="description">
+            Get ready to dive into a world of unlimited entertainment. 
+            From blockbusters to indie gems, Cinefy is curating the perfect collection for you.
+            Stay tuned!
+        </p>
+
+        <!-- Newsletter / Notify (Visual Only) -->
+        <form class="notify-box" onsubmit="event.preventDefault(); alert('Thanks! We will notify you when Cinefy goes live.');">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit">Notify Me</button>
+        </form>
+
+        <!-- Powered By Section -->
+        <div class="footer">
+            <p class="powered-by">
+                POWERED BY 
+                <a href="https://apnaaddatech.github.io/Official_/" target="_blank">APNA ADDA</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
