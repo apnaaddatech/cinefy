@@ -7,7 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -31,6 +31,7 @@
                         'glow-gold': '0 0 15px rgba(255, 215, 0, 0.3)',
                         'glow-red': '0 0 20px rgba(255, 0, 60, 0.4)',
                         'glow-blue': '0 0 20px rgba(0, 240, 255, 0.4)',
+                        'glow-green': '0 0 20px rgba(0, 255, 65, 0.4)',
                     }
                 }
             }
@@ -61,6 +62,10 @@
         .toast-enter { transform: translateY(-20px) scale(0.95); opacity: 0; }
         .toast-enter-active { transform: translateY(0) scale(1); opacity: 1; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .toast-exit-active { transform: translateY(-20px) scale(0.9); opacity: 0; transition: all 0.3s ease; }
+
+        /* Custom Hover for Category Cards */
+        .cat-card:hover .cat-icon { transform: scale(1.2) rotate(10deg); opacity: 0.2; }
+        .cat-card:hover .cat-bg { transform: scale(1.05); }
     </style>
 </head>
 <body class="bg-dark text-gray-100 antialiased overflow-x-hidden min-h-screen flex flex-col selection:bg-neonBlue selection:text-black">
@@ -175,14 +180,18 @@
                 <!-- CATEGORIES VIEW -->
                 <div id="view-categories" class="client-subview hidden w-full px-5 md:px-10 pt-6 md:pt-10 fade-in min-h-[80vh]">
                     <div id="categories-main-list" class="fade-in">
-                        <h2 class="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-neonGreen to-white">Browse by Genre</h2>
-                        <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 pb-10"></div>
+                        <div class="flex items-center space-x-3 mb-8">
+                            <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonGreen to-white tracking-tight">Browse by Genre</h2>
+                            <div class="h-1 flex-1 bg-gradient-to-r from-neonGreen/50 to-transparent rounded-full opacity-50"></div>
+                        </div>
+                        <!-- Updated Grid with Better Gap -->
+                        <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12"></div>
                     </div>
 
                     <div id="category-movies-view" class="hidden fade-in">
                         <div class="flex items-center mb-8 space-x-4">
-                            <button onclick="backToCategories()" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:border-neonBlue hover:shadow-glow-blue transition active:scale-95">
-                                <i class="fa-solid fa-arrow-left"></i>
+                            <button onclick="backToCategories()" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:border-neonBlue hover:shadow-glow-blue transition active:scale-95 group">
+                                <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition"></i>
                             </button>
                             <h2 id="selected-category-title" class="text-3xl font-bold text-neonBlue truncate">Category</h2>
                         </div>
@@ -562,8 +571,7 @@
                     // Open In-App Player
                     playVideo(`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`);
                 } else {
-                    // Fallback for non-youtube links (iframe or new tab)
-                    // Trying to embed generic link
+                    // Fallback for non-youtube links
                      playVideo(m.watchUrl);
                 }
             };
@@ -601,7 +609,6 @@
         window.playVideo = (url) => {
              const overlay = document.getElementById('video-player-overlay');
              const container = document.getElementById('player-container');
-             // Determine if it's an embed url or standard
              container.innerHTML = `<iframe src="${url}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
              overlay.classList.remove('hidden');
         };
@@ -675,18 +682,44 @@
             renderMoviesList();
         }
 
+        // === CATEGORY STYLING HELPER ===
+        function getCategoryTheme(name) {
+            const n = name.toLowerCase();
+            if(n.includes('action') || n.includes('adventure')) return { color: 'from-orange-600 to-red-600', icon: 'fa-fire-flame-curved', glow: 'shadow-glow-red', text: 'text-red-500' };
+            if(n.includes('sci') || n.includes('space')) return { color: 'from-blue-600 to-cyan-400', icon: 'fa-rocket', glow: 'shadow-glow-blue', text: 'text-cyan-400' };
+            if(n.includes('horror') || n.includes('thriller')) return { color: 'from-purple-900 to-gray-900', icon: 'fa-ghost', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.4)]', text: 'text-purple-500' };
+            if(n.includes('comedy') || n.includes('fun')) return { color: 'from-yellow-400 to-orange-400', icon: 'fa-masks-theater', glow: 'shadow-glow-gold', text: 'text-gold' };
+            if(n.includes('romance') || n.includes('love')) return { color: 'from-pink-500 to-rose-500', icon: 'fa-heart', glow: 'shadow-[0_0_15px_rgba(244,63,94,0.4)]', text: 'text-pink-500' };
+            if(n.includes('drama')) return { color: 'from-emerald-600 to-teal-500', icon: 'fa-film', glow: 'shadow-glow-green', text: 'text-emerald-400' };
+            if(n.includes('animation') || n.includes('kids')) return { color: 'from-indigo-500 to-purple-500', icon: 'fa-wand-magic-sparkles', glow: 'shadow-glow-blue', text: 'text-indigo-400' };
+            return { color: 'from-gray-700 to-gray-900', icon: 'fa-clapperboard', glow: 'shadow-none', text: 'text-gray-400' };
+        }
+
         function renderClientCategories() {
             const grid = document.getElementById('categories-grid');
             if(!grid) return;
             grid.innerHTML = '';
+            
             Object.entries(categoriesData).forEach(([id, cat]) => {
+                const theme = getCategoryTheme(cat.name);
                 const el = document.createElement('div');
-                el.className = "relative h-32 md:h-40 rounded-2xl overflow-hidden cursor-pointer group border border-white/5 hover:border-neonGreen/50 transition bg-gray-900 shadow-lg";
+                
+                // Updated Card Design: 3D Tilt Effect + Glassmorphism + Dynamic Gradient
+                el.className = "cat-card relative h-36 md:h-44 rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-2 border border-white/5 hover:border-white/20 hover:shadow-2xl " + theme.glow;
                 el.onclick = () => openCategoryView(id);
                 el.innerHTML = `
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black group-hover:scale-110 transition duration-500"></div>
-                    <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
-                        <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider group-hover:text-neonGreen transition z-10">${cat.name}</h3>
+                    <div class="cat-bg absolute inset-0 bg-gradient-to-br ${theme.color} opacity-40 group-hover:opacity-70 transition duration-500"></div>
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm group-hover:backdrop-blur-none transition duration-500"></div>
+                    
+                    <!-- Decor Icon -->
+                    <i class="cat-icon fa-solid ${theme.icon} absolute -bottom-4 -right-4 text-[7rem] md:text-[9rem] text-white/5 group-hover:text-white/20 transition-all duration-500 ease-out origin-bottom-right transform rotate-0"></i>
+                    
+                    <!-- Content -->
+                    <div class="absolute inset-0 p-6 flex flex-col justify-end z-10">
+                        <div class="transform translate-y-2 group-hover:translate-y-0 transition duration-300">
+                             <span class="text-xs font-bold text-white/50 uppercase tracking-widest mb-1 block opacity-0 group-hover:opacity-100 transition delay-75">Genre</span>
+                             <h3 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase drop-shadow-md group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300">${cat.name}</h3>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(el);
@@ -827,4 +860,4 @@
 
     </script>
 </body>
-</html>
+                    </html>
